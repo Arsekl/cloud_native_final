@@ -59,31 +59,31 @@ pipeline {
 
 }
 
-// node('slave') {
-//     container('jnlp-kubectl') {
-//         stage('connect'){
-//             sh 'curl "http://p.nju.edu.cn/portal_io/login" --data "username=181098100&password=Hjm986667250"'
-//         }
-//         stage('Git Clone') {
-//             git url: "https://github.com/Arsekl/cloud_native_final.git"
-//
-//         }
-//         stage('YAML') {
-//             echo "5. Change YAML File Stage"
-//             sh 'sed -i "s#{VERSION}#${BUILD_ID}#g" ./jenkins/scripts/cloud-native-project.yaml'
-//
-//         }
-//         stage('Deploy') {
-//             echo "6. Deploy To K8s Stage"
-//             sh 'kubectl apply -f ./jenkins/scripts/cloud-native-project.yaml -n cn202101'
-//             sh 'kubectl apply -f ./jenkins/scripts/cloud-native-project-serviceMonitor.yaml'
-//
-//         }
+node('slave') {
+    container('jnlp-kubectl') {
+        stage('connect'){
+            sh 'curl "http://p.nju.edu.cn/portal_io/login" --data "username=181098100&password=hjm986667250"'
+        }
+        stage('Git Clone') {
+            git url: "https://github.com/Arsekl/cloud_native_final.git"
+
+        }
+        stage('YAML') {
+            echo "5. Change YAML File Stage"
+            sh 'sed -i "s#{VERSION}#${BUILD_ID}#g" cloud-native-project.yaml'
+
+        }
+        stage('Deploy') {
+            echo "6. Deploy To K8s Stage"
+            sh 'kubectl apply -f cloud-native-project.yaml -n cn202101'
+            sh 'kubectl apply -f cloud-native-project-serviceMonitor.yaml'
+
+        }
 //         stage('RTF Test'){
 //             echo "RTF Test Stage"
 //             sh 'kubectl apply -f ./jenkins/scripts/rtf.yaml -n cn202101'
 //
 //         }
-//     }
+    }
 
-//}
+}
